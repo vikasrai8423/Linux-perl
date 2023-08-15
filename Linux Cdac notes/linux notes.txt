@@ -1,0 +1,264 @@
+[12:22 PM, 3/30/2023] Cdac Siddhesh HPCSA: Job Scheduling in Linux:
+-------------------------
+cron scheduling: 
+	- To configure the Job we use an utility named as: `crontab`
+	- To run the job in future we have a service called: 
+		RedHat/CentOS 	: crond
+		Debian		: cron
+	- To schedule the Job, you need to remember 6 things:
+		* minute	[ 0-59 ]
+		* hour			[ 0-23 ]
+		* date			[ 1-31 ]
+		* month		[ 1-12 ]
+		* day			[ 0-6 ] 0 : SUNDAY
+		* Full path of command
+	
+		# date
+
+
+Let's Configure Job:
+--------------------
+
+# crontab -e
+
+-e : edit
+
+min      hr      date      month      day      echo "LOL"
+
+Save & Exit
+
+To check list of jobs:
+`````
+# crontab -l
+
+Next Step:
+---------
+Once you configure the Job, you must restart/reload the service.
+
+ systemctl:
+`````
+			- This is to manage services in RHEL/CentOS, we can perform actions like start, stop, status, restart, reload etc....
+
+
+		# systemctl <action> <service_name>
+		e.g # systemctl status crond
+
+
+
+
+=> Debian		: service
+			- This is to manage services in Debian, we can perform actions like start, stop, status, restart, reload etc....
+
+		# service <service_name> <action>
+		e.g : service cron restart
+
+
+Configure the job for normal users:
+-----------------------------------
+# crontab -e -u username
+
+min hr date month day cmd
+:wq
+#systemctl restart crond
+
+# crontab -l -e username
+
+
+Allow/Deny users to use crontab:
+---------------------------------
+Deny:
+-----
+
+# vim /etc/cron.deny
+
+username
+
+:wq
+
+
+Allow:
+------
+Create a file:
+
+	# vim /etc/cron.allow
+	 root
+	:wq
+
+--------------------------------------------
+[12:22 PM, 3/30/2023] Cdac Siddhesh HPCSA: Basic HTTP Req:
+----------------
+curl https://example.com
+
+To ignore SSL/TLS cert exeption:
+--------------------------------
+curl -k https://example.com
+
+To forward the HTTP request based on Location Header:
+-----------------------------------------------------
+curl -k https://example.com -L
+
+To verbose:
+-----------
+curl -k https://example.com -v
+
+Only response header:
+---------------------
+curl -k https://example.com -I
+
+Store the output/silent:
+------------------------
+curl -ks https://example.com -o filename
+curl -ks https://example.com -o /dev/null
+
+HTTP Req Methods: [GET, POST, PUT ...]
+--------------------------------------
+curl -ks https://example.com -X OPTIONS
+curl -ks https://example.com -X GET
+
+
+
+
+[12:22 PM, 3/30/2023] Cdac Siddhesh HPCSA: Process Substitution:
+---------------------
+
+Piping the 'stdout' of a process into the 'stdin' of another is nice but what if you need to pipe the 'stdout' of multiple commands?
+
+here you need 'Process Substitution'.
+
+NOTE: Process Substitution treated as a file and it always return file descriptor.
+
+<(cmd)
+>(cmd)
+
+To send data into process substitution using '>' & read with '<'. It use "/dev/fd/<n>" to send results of (cmd) to another process.
+
+eg
+
+# echo <(echo $BASHPID)
+/dev/fd/63
+
+To read this file/file descriptor
+# cat <(echo $BASHPID)
+4111
+
+Comparision between command substitution & process substitution
+===============================================================
+
+# seq 10 > numbers.txt
+# wc -l numbers.txt
+10
+
+# wc -l <(seq 10)
+10
+
+# wc -l $(seq 10)
+errors
+[12:22 PM, 3/30/2023] Cdac Siddhesh HPCSA: - Directory stacks manipulation
+`````
+Navigate with 'pushd' & 'popd'
+
+eg:
+# cd test
+# cd hello
+# cd dbda
+# pwd
+/home/students/test/hello/dbda
+
+You can use the above example to navigate but you can also save where you are.
+Using pushd & popd [works with LIFO like a stack]
+
+So you can understand it like : you can put things in stack, if you try to take something back off of that stack whatever you put on last is going to be what comes back off first.
+
+# pushd ../../  [will push the current dir with pwd]
+ 
+Now you can see we have two paths in our stack
+
+/home/students/test /home/students/test/hello/dbda
+
+If i want to get back wherever i was
+
+#popd
+
+
+Another example:
+```````
+# cd /mnt/dbda/test
+
+# mkdir a b c d
+# ls
+a b c d
+
+
+# dirs [ to check the stack ]
+# dirs -v [ to check the stack with index number ]
+
+If
+
+# pushd a
+# dirs -v [new dir take position 0 and privious is on 1]
+0	/mnt/dbda/test/a
+1	/mnt/dbda/test
+
+# dirs -c [ clean ]
+
+
+NOW: we have dirs 'a' 'b' & 'c', imagine you need to access all those dirs in the same terminal frequently
+
+We need to set the stack as 
+'c' => 2
+'b' => 1
+'a' => 0
+
+# pushd c
+# pushd ../b
+# pushd ../a
+
+#dirs -v
+
+#cd ~1
+#cd ~2
+
+____________________
+[12:22 PM, 3/30/2023] Cdac Siddhesh HPCSA: https://pauljerimy.com/security-certification-roadmap/
+[12:22 PM, 3/30/2023] Cdac Siddhesh HPCSA: TARBALL
+`[.tar]
+Create:
+`
+# tar -cvf backup.tar /etc
+-c : create
+
+View:
+``
+# tar -tvf backup.tar
+-t : Tree view
+
+Extract:
+``
+# tar -xvf backup.tar
+-x : extract
+
+# tar -xvf backup.tar -C /out
+-C : create restored data
+
+
+GUNZIP:
+`
+# gzip backup.tar
+# ls 
+backup.tar.gz
+
+# gunzip backup.tar.gz
+# ls 
+backup.tar 
+
+
+TARBALL + GUNZIP:
+``````[.tgz]
+# tar -czvf backup.tgz /etc
+
+# tar -tzvf backup.tgz
+
+# tar -xzvf backup.tgz
+# tar -xzvf backup.tgz -C /data
+
+# du -sch /dir

@@ -1,0 +1,91 @@
+Q1) create user test1 & test2 using adduser command
+
+#sudo adduser test1
+#sudo adduser test2
+
+
+
+Q2) create a group testing and assign the user test1 & test2 to group testing 
+
+#sudo addgroup testing
+#sudo usermod -g testing test1
+#sudo usermod -g testing test2
+
+
+
+Q3) Switch to root user
+
+#su -
+
+
+
+Q4) add user test1 & test2 in the /etc/sudoers files
+
+-> First open sudoers file by command
+
+#sudo visudo
+
+-> Then add these line below this "%sudo   ALL=(ALL:ALL) ALL" line 
+
+test1     ALL=(ALL:ALL) ALL
+test2     ALL=(ALL:ALL) ALL
+ 
+
+Q5) With root user navigate to directory /media
+
+-> 1st switch to root user by command
+
+#su -
+-rw-rw---- 1 ss testing 0 Apr  3 15:58 ax.txt
+->then
+
+# cd /
+#cd /media
+
+
+
+Q6) Inside the /media directory create a directory test-scripts
+
+#mkdir test-scripts
+
+
+
+Q7) Create 2 files ax.txt & bz.txt
+
+#touch ax.txt
+#touch bz.txt
+
+
+
+Q8) Change file ax.txt & bz.txt ownership from group root to testing
+
+#chgrp testing testing
+
+
+
+Q9) set permissions rw-rw---o ax.txt & rw-----rw on bz.txt
+
+#sudo chmod 660 ax.txt
+#sudo chmod 606 bz.txt
+
+
+Q12) Get ACL using getfacl on file ax.txt
+
+#sudo getfacl ax.txt
+
+
+
+Q13) add default user to ACL using setfacl command with rw permisson
+
+#sudo setfacl -m u:harry:rw ax.txt
+
+
+
+Q14) check updated the ACL with getfacl
+
+#sudo getfacl ax.txt
+
+-rw-rw-rw- 1 root testing ax.txt
+
+
+

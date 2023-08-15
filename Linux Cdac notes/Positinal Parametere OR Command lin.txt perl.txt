@@ -1,0 +1,324 @@
+Positinal Parametere OR Command line Arguments:
+`````````
+- Unix/Linux Shell programming you will recognize $0 is being the name of the script.
+- @ARGV is just a regular array in Perl, so index starts with $0
+
+#!/usr/bin/perl
+use strict;
+use warnings;
+my $name   = $ARGV[0];
+my $number = $ARGV[1];
+print "\$name = $name";
+print "\$number = $number";
+
+# perl script.pl arg1 arg2
+
+_______________________________________OR__________________________
+#!/usr/bin/perl
+use strict;
+use warnings;
+my ($name, $number) = @ARGV;
+print "\$name = $name\n";
+print "\$number = $number\n";
+
+# perl script.pl pop1 pop2
+___________________________________________________________________
+CONTROL STRUCTURE:
+```
+Operators:
+``
+1) Relational Operator:
+`````
+Numeric comparisons: ==, !=, <, <=, >, >=
+String Comparisons: eq, ne, lt, le, gt, ge
+RegEx Match/not-match: =~, !~
+
+2) Logical Operators:
+````
+||, &&, !
+or, and, not
+
+3) String Operator:
+````
+. (dot) is the string concatenation/joining operator
+x is repetition operator
+ 
+4) File I/O Operators:
+````
+<			: Read Operator
+>			: write Operator
+>>		: Append Operator
+|-		: Output Pipe
+-|		: Input Pipe
+
+5) File Test Conditions:
+```
+-r	: File or Dir is readable
+-w	: File or Dir is writable
+-x	: File or Dir is executable
+-o	: File or Dir is owned by user
+-e	: File or Dir exists
+-z	: File exists and has zero size
+-s	: File exists and has non-zero size
+-f	: File
+-d	: Dir
+-l	: Symbolic Link
+-T	: ASCII Text file
+-B	: File is binary 
+
+if...elsif...else:
+```
+if (condition){
+  statement
+  statement
+  ...
+} elsif (condition){
+  statement
+  statement
+  ...
+} else{
+  statement
+  statement
+  ...
+}
+
+
+# vim script.pl 
+
+#!/usr/bin/perl -w
+use strict;
+
+print "Enter : ";
+$a = <>;
+chomp($a);
+
+if ($a == "1"){
+	print "One\n";
+} elsif ($a == "2"){
+	print "Two\n";
+} else {
+	print "None\n";
+}
+
+
+
+----------------
+# vim script.pl
+
+#!/usr/bin/perl
+use strict;
+use warnings;
+print "Enter : ";
+$a = <>;
+chomp($a);
+
+if ($a == "1" || $a <= "5" ){
+        print "First statement\n";
+} elsif ($a == "10"){
+        print "Second Statement\n";
+} else {
+        print "None\n";
+}
+
+# perl script.pl
+Enter : 1
+First statement
+
+# perl script.pl
+Enter : 10
+Second Statement
+
+
+Why?????????
+```
+# perl script.pl
+Enter : ss
+Argument "ss" isn't numeric in numeric eq (==) at 1.pl line 8, <> line 1.
+First statement
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"defined" or "not defined" in if control structure:
+`````````
+#!/usr/bin/perl
+use strict;
+use warnings;
+my ($a, $b) = @ARGV;
+
+if (defined $a && defined $b){
+	print "Cool\n";
+} elsif (not defined $a && not defined $b){
+	print "Define something\n"
+}
+-------------------------------------
++++++++++++++++++++++++++++++++++++++
+with Array:
+``
+if (@names) {
+    # do something
+}
+
+With HASH
+```
+if (%names) {
+    # do something
+}
+
+-------------------------------------
+Create a script to check that command/utility/tool exists or not.
+RUN : 
+# perl script.pl pwd
+Command exists.
+
+# perl script.pl pwdss
+Command not found.
+
+# perl script.pl 
+Error: arg required
+exit 127
+
+--------------------------------------
+
+
+
+
+
+Q. Create a script which run with an argument, like:
+
+# perl script.pl ARGUMENT
+
+With conditions as if no parameter pass then it should print "[ERROR] No parameter provided. Usage: perl $0 PARAMETER" otherwise print the parameter as it is (given as argument)
+
++++++++++++++++++++++++++++++++++++++
+SPLIT:
+``````
+=> split REGEX, STRING will split the STRING at every match of the REGEX.
+
+eg:
+split /WORD/, $str;
+
+
+
+
+
+
+
+
+=> split REGEX, STRING, LIMIT where LIMIT is a positive number. This will split the the STRING at every match of the REGEX, but will stop after it found LIMIT matches.
+
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+my @a = `id root`;
+
+my ($d, $e) = split / /, "@a";
+print "$d\n";
+print "$e\n";
+
+
+
+
+For Loop:
+`
+for (condition){
+	statement
+}
+--------------
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+for (1..10){
+ print "Ulalala\n"
+}
+----------
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $i;
+for ($i=1; $i<=50; $i++){
+        print "$i\n";
+				 sleep(2);
+}
+
+# perl script.pl
+-------------------------------
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my @arr1 = ("one", "two", "three");
+for $i (@arr1){
+        print "$i\n";
+}
+
+# perl script.pl
+The for/foreach loop is one builtin which assigns to the $_ by default. If you don’t specify a variable name, $_ is assumed:
+
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my @arr1 = ("one", "two", "three");
+for (@arr1){
+        print "$_\n";
+}
+
+
+
+
+
+
+
+
+
+---------------------------------------------
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+@arr1 = (1..10);
+for (my $i=0; $i<=$#arr1; $i++){
+        print "$arr1[$i]\n";
+}
+
+# perl script.pl
+---------------------------------------------
+
+
+
+---------------------------------------------
+exit on condition
+`````String Comparison
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+print "Love is part of life not life! Agree? (y/n): ";
+my $a = <>;
+chomp($a);
+if ($a eq "y"){
+	print "Just kidding bruhhhh\n";
+}elsif($a eq "n"){
+	print "Kill yourself\n";
+}else{
+	exit;
+}
+
+With exit code/status:
+````
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+print "Love is part of life not life! Agree? (y/n): ";
+my $a = <>;
+chomp($a);
+if ($a eq "y"){
+	print "Just kidding bruhhhh\n";
+}elsif($a eq "n"){
+	print "Kill yourself\n";
+}else{
+	exit 127;
+}
